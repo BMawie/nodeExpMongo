@@ -31,8 +31,8 @@ app.use('/users', users);
 app.get('/tags', tags.index);
 app.get('/tags/:id', tags.show);
 app.post('/tags', tags.create);
-app.put('/tags', tags.update);
-app.delete('/tags', tags.delete);
+app.put('/tags/:id', tags.update);
+app.delete('/tags/:id', tags.delete);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

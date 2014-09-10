@@ -30,7 +30,11 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
 
   var tag_name = req.body.tag_name; // Name of tag. 
-  var description = req.body.tag_description;  // Description of the tag
+  var tag_description = req.body.tag_description;
+  var tag_minor = req.body.tag_minor;
+  var tag_major = req.body.tag_major;
+  var tag_uuid = req.body.tag_uuid;
+  var tag_type = req.body.tag_type;
 
   //Tag.findOne({ name: tag_name }, function(err, doc) {  // This line is case sensitive.
   Tag.findOne({ name: { $regex: new RegExp(tag_name, "i") } }, function(err, doc) {  // Using RegEx - search is case insensitive
@@ -39,7 +43,11 @@ exports.create = function(req, res) {
       var newTag = new Tag(); 
 
       newTag.name = tag_name; 
-      newTag.description = description; 
+      newTag.description = tag_description; 
+      newTag.minor = tag_minor;
+      newTag.major = tag_major;
+      newTag.uuid = tag_uuid;
+      newTag.type = tag_type;
       
       newTag.save(function(err) {
 
@@ -65,14 +73,24 @@ exports.create = function(req, res) {
 
 exports.update = function(req, res) {
   
-  var id = req.body.id; 
+  var id = req.params.id; 
   var tag_name = req.body.tag_name;
   var tag_description = req.body.tag_description; 
+  var tag_minor = req.body.tag_minor;
+  var tag_major = req.body.tag_major;
+  var tag_uuid = req.body.tag_uuid;
+  var tag_type = req.body.tag_type;
 
   Tag.findById(id, function(err, doc) {
       if(!err && doc) {
         doc.name = tag_name; 
         doc.description = tag_description; 
+        doc.minor = tag_minor;
+        doc.major = tag_major;
+        doc.uuid = tag_uuid;
+        doc.type = tag_type;
+        doc.date_updated = new Date();
+
         doc.save(function(err) {
           if(!err) {
             res.json(200, {message: "Tag updated: " + tag_name});    
@@ -90,7 +108,7 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
 
-  var id = req.body.id; 
+  var id = req.params.id;
   Tag.findById(id, function(err, doc) {
     if(!err && doc) {
       doc.remove();
